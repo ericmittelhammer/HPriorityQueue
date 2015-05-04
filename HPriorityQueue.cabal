@@ -48,10 +48,10 @@ cabal-version:       >=1.10
 
 library
   -- Modules exported by the library.
-  exposed-modules:   PriorityQueue.PQ
+  exposed-modules:   PriorityQueue.PQ, PriorityQueue.Heap.BinomialHeap
 
   -- Modules included in this library but not exported.
-  other-modules: PriorityQueue.Heap.BinomialHeap
+  -- other-modules: PriorityQueue.Heap.BinomialHeap
 
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
@@ -64,3 +64,14 @@ library
 
   -- Base language which the package is written in.
   default-language:    Haskell2010
+
+test-suite test-tree
+  type:               exitcode-stdio-1.0
+  main-is:            TestTree.hs
+  hs-source-dirs:     test
+  build-depends:      base >=4.6 && <4.8,
+                      HPriorityQueue,
+                      test-framework,
+                      test-framework-hunit,
+                      HUnit
+                      -- containers == 0.5.*
