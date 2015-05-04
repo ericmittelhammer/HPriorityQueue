@@ -65,8 +65,10 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get install libgmp-dev
     cd /
-    sudo tar xvf /vagrant/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+    wget https://www.haskell.org/platform/download/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz -P /var/tmp/
+    sudo tar xvf /var/tmp/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
     sudo /usr/local/haskell/ghc-7.8.3-x86_64/bin/activate-hs
   SHELL
 end

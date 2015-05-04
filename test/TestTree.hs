@@ -1,4 +1,4 @@
-module TestTree where
+module Main(main) where
 
 import PriorityQueue.Heap.BinomialHeap
 import Test.HUnit

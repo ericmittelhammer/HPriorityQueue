@@ -10,6 +10,6 @@ mergeTree :: Ord a => Tree a -> Tree a -> Tree a
 mergeTree EmptyTree EmptyTree = EmptyTree
 mergeTree EmptyTree h = h
 mergeTree h EmptyTree = h
-mergeTree h1@(Singleton v1) h2@(Singleton v2)
-  | v1 >= v2    = Node v1 [Singleton v2]
+mergeTree (Singleton v1) (Singleton v2)
+  | v1 >= v2    = Node v1 [Singleton v2]  -- eventually change this to handle min and max heaps
   | otherwise   = Node v2 [Singleton v1]
