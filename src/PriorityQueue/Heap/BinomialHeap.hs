@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module PriorityQueue.Heap.BinomialHeap (
     BinomialHeap,
     Tree(..),
@@ -5,11 +6,11 @@ module PriorityQueue.Heap.BinomialHeap (
 
 import PriorityQueue.PQ
 
-type BinomialHeap r v = [Tree r v]
+type BinomialHeap a = [Tree a]
 
-data Tree r v = Tree { rank :: r, value :: v, heap :: (BinomialHeap r v) } deriving (Show, Eq)
+data Tree a = Tree { rank :: Int, value :: a, heap :: (BinomialHeap a) } deriving (Show, Eq)
 
-mergeTrees :: (Num r, Eq r, Ord v) => Tree r v -> Tree r v -> Tree r v
+mergeTrees :: (Ord a) => Tree a -> Tree a -> Tree a
 
 -- merge this into that
 mergeTrees this that
@@ -22,10 +23,12 @@ mergeTrees this that
                 then (this, that)
                 else (that, this)
 
-mergeHeaps :: (Num r, Eq r, Ord r, Ord v) => BinomialHeap r v -> BinomialHeap r v -> BinomialHeap r v
+mergeHeaps :: (Ord a) => BinomialHeap a -> BinomialHeap a -> BinomialHeap a
 mergeHeaps x [] = x
 mergeHeaps [] y = y
 mergeHeaps (x:xs) (y:ys)
     | rank x < rank y = x : (mergeHeaps xs (y:ys))
     | rank y < rank x = y : (mergeHeaps (x:xs) ys)
     | otherwise = mergeHeaps [mergeTrees x y] (mergeHeaps xs ys)
+
+instance Ord a => PQ (BinomialHeap a) a

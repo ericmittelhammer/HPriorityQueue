@@ -1,4 +1,12 @@
+{-# LANGUAGE  MultiParamTypeClasses #-}
 module PriorityQueue.PQ where
 
-class PQ a where
-    add :: k -> a k -> a k
+class Ord a => PQ q a where
+
+    enqueue :: q -> a -> q
+
+    dequeue :: q -> (a, q)
+
+    peek :: q -> a
+
+    toList :: q -> [a]
