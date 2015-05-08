@@ -37,13 +37,13 @@ mergeTrees this that
                 then (this, that)
                 else (that, this)
 
--- mergeHeaps :: Ord a => BinomialHeap a -> BinomialHeap a -> BinomialHeap a
--- mergeHeaps x [] = x
--- mergeHeaps [] y = y
--- mergeHeaps (x:xs) (y:ys) =
---     | rank x < rank y = x : mergeHeaps xs ys
---     | rank y > rank x = y : mergeHeaps xs ys
---     | otherwise
+mergeHeaps :: (Num r, Eq r, Ord r, Ord v) => BinomialHeap r v -> BinomialHeap r v -> BinomialHeap r v
+mergeHeaps x [] = x
+mergeHeaps [] y = y
+mergeHeaps (x:xs) (y:ys)
+    | rank x < rank y = x : (mergeHeaps xs (y:ys))
+    | rank y < rank x = y : (mergeHeaps (x:xs) ys)
+    | otherwise = mergeHeaps (mergeTrees x y : xs) ys
 
 
 {- merge (x:[]) (y:[]) = [x <> y]
