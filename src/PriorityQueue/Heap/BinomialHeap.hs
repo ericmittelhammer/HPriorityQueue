@@ -31,4 +31,18 @@ mergeHeaps (x:xs) (y:ys)
     | rank y < rank x = y : (mergeHeaps (x:xs) ys)
     | otherwise = mergeHeaps [mergeTrees x y] (mergeHeaps xs ys)
 
-instance Ord a => PQ (BinomialHeap a) a
+minVal :: (Ord a) => BinomialHeap a -> a
+minVal h = minimum $ map (\ x -> value x) h
+
+popMin :: (Ord a) => BinomialHeap a -> (a, BinomialHeap a)
+popMin (x:xs) = bubble x xs
+    where
+        -- bubble :: Tree a -> BinomialHeap a -> (a, BinomialHeap a)
+        bubble m [] = (value m, heap m)
+        bubble m (x:xs) =
+            let next = bubble newMin xs
+                (newMin, skippedTree) =
+                    if value x < value m
+                    then    (x, m)
+                    else    (m, x)
+            in (fst next, mergeHeaps [skippedTree] (snd next))
