@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 module PriorityQueue.Heap.BinomialHeap (
     BinomialHeap,
     Tree(..),
