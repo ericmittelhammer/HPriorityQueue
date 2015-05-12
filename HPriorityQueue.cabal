@@ -73,5 +73,6 @@ test-suite test-tree
                       HPriorityQueue,
                       test-framework,
                       test-framework-hunit,
-                      HUnit
+                      HUnit,
+                      random
                       -- containers == 0.5.*

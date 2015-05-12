@@ -9,4 +9,4 @@ class Ord a => PQ q a where
 
     peek :: q -> a
 
-    toList :: q -> [a]
+    --toList :: q -> [a]

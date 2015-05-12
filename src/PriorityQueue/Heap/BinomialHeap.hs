@@ -2,7 +2,9 @@
 module PriorityQueue.Heap.BinomialHeap (
     BinomialHeap,
     Tree(..),
-    mergeTrees) where
+    mergeTrees,
+    mergeHeaps,
+    toList) where
 
 import PriorityQueue.PQ
 
@@ -45,3 +47,8 @@ popMin (x:xs) = bubble x xs
                                             then    (x, m)
                                             else    (m, x)
             in (fst next, mergeHeaps [skippedTree] (snd next))
+
+toList :: (Ord a) => BinomialHeap a -> [a]
+toList [] = []
+toList h = popped : toList remainingHeap
+    where (popped, remainingHeap) = popMin h
