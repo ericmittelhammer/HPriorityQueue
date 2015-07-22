@@ -1,4 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
 module PriorityQueue.Heap.BinomialHeap (
     BinomialHeap,
     Tree(..),
@@ -7,6 +6,7 @@ module PriorityQueue.Heap.BinomialHeap (
     toList) where
 
 import PriorityQueue.PQ
+import Control.Monad.State
 
 type BinomialHeap a = [Tree a]
 
@@ -37,18 +37,28 @@ mergeHeaps (x:xs) (y:ys)
 minVal :: (Ord a) => BinomialHeap a -> a
 minVal h = minimum $ map value h
 
-popMin :: (Ord a) => BinomialHeap a -> (a, BinomialHeap a)
-popMin (x:xs) = bubble x xs
-    where
-        bubble m []     = (value m, heap m)
-        bubble m (x:xs) =
-            let next                    = bubble newMin xs
-                (newMin, skippedTree)   = if value x < value m
-                                            then    (x, m)
-                                            else    (m, x)
-            in (fst next, mergeHeaps [skippedTree] (snd next))
+
+
+bubble :: (Ord a) => BinomialHeap a -> State a (BinomialHeap a)
+bubble (x:[]) = do
+  put $ value x
+  return $ heap x
+bubble (f:s:xs) = do
+  put $ minimum [value f, value s]
+  let (hp, lp) = if value f < value s  -- TODO: support both min and max heaps
+              then (f, s)
+              else (s, f)
+  rest <- bubble (hp:xs)
+  return $ mergeHeaps [lp] rest
+
+
+popMin :: (Ord a) => BinomialHeap a -> (BinomialHeap a, a)
+popMin (x:xs) = runState (bubble (x:xs)) (value x)
+
+push :: (Ord a) => BinomialHeap a -> a -> BinomialHeap a
+push heap val = mergeHeaps heap ([Tree {rank=0, value=val, heap=[]}])
 
 toList :: (Ord a) => BinomialHeap a -> [a]
 toList [] = []
 toList h = popped : toList remainingHeap
-    where (popped, remainingHeap) = popMin h
+    where (remainingHeap, popped) = popMin h
